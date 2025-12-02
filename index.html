@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caesar Cipher Encrypt/Decrypt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: url('caesar_bg.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #eee;
+        }
+        .container {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 12px;
+        }
+        input, textarea, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #222;
+            color: #eee;
+        }
+        button {
+            cursor: pointer;
+            border: none;
+        }
+        .encrypt { background: #007bff; }
+        .decrypt { background: #28a745; }
+        .copy-btn { background: #ff9800; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Caesar Cipher Encrypt / Decrypt</h2>
+
+        <label>Masukkan Teks:</label>
+        <textarea id="text" rows="4"></textarea>
+
+        <label>Shift (angka):</label>
+        <input type="number" id="shift" value="3" />
+
+        <button class="encrypt" onclick="encrypt()">Enkripsi</button>
+        <button class="decrypt" onclick="decrypt()">Dekripsi</button>
+
+        <label>Hasil:</label>
+        <textarea id="result" rows="4" readonly></textarea>
+
+        <button class="copy-btn" onclick="copyText()">Copy Hasil</button>
+    </div>
+
+    <script>
+        function caesarCipher(text, shift) {
+            const result = [];
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (char.match(/[a-z]/i)) {
+                    let code = text.charCodeAt(i);
+                    let base = code >= 65 && code <= 90 ? 65 : 97;
+                    char = String.fromCharCode(((code - base + shift) % 26 + 26) % 26 + base);
+                }
+                result.push(char);
+            }
+            return result.join("");
+        }
+
+        function encrypt() {
+            let text = document.getElementById("text").value;
+            let shift = parseInt(document.getElementById("shift").value);
+            document.getElementById("result").value = caesarCipher(text, shift);
+        }
+
+        function decrypt() {
+            let text = document.getElementById("text").value;
+            let shift = parseInt(document.getElementById("shift").value);
+            document.getElementById("result").value = caesarCipher(text, -shift);
+        }
+
+        function copyText() {
+            let result = document.getElementById("result");
+            result.select();
+            document.execCommand("copy");
+            alert("Hasil berhasil dicopy!");
+        }
+    </script>
+</body>
+</html>
